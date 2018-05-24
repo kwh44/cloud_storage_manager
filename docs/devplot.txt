@@ -1,7 +1,0 @@
-﻿- user can choose available cloud storages to connect; 
-- get a access to files in that cloud storage accounts
-- make available such options in the web-app, as uploading files, downloading files and deleting files
--- dynamically get a files tree of the each cloud storage account connected.
--- create a custom files search function, that can get a precise location of the file or folder in the 
-cloud storage accountі connected.
-
