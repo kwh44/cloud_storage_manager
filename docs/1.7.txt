@@ -1,0 +1,6 @@
+﻿Мною було беспосередньо розглянуто використання Dropbox API для отримання списку файлів користувача
+та синхронізацію файлів з його акаунтом, також я ознайомився із документацією по використанню GoogleDrive
+та OneDrive SDK.
+Приклад використання Dropbox API міститься за цим посиланням:
+https://github.com/kwh331/cloud_storage_manager/blob/master/examples/dbx_api_example.py
+
