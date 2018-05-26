@@ -38,20 +38,6 @@ class GDrive_Storage:
         except:
             return False
 
-    def upload_folder(self, name):
-        """Return True if the upload of the folder was successful, otherwise False"""
-        parent = input("Enter the parent folder (root by default): ")
-        file_metadata = {'name': name,
-                         'mimeType': 'application/vnd.google-apps.folder',
-                         'parents': parent if parent else 'root'}
-        try:
-            file = self.__drive.files().create(body=file_metadata,
-                                               fields='id').execute()
-        except:
-            print("An error occurred, while uploading folder, please try again.")
-            return -1
-        return file.get('id')
-
     def create_folder(self, name):
         """Return True if the creation of empty folder in user's Google
         Drive storage was successful, otherwise False."""
@@ -88,6 +74,7 @@ class GDrive_Storage:
                 break
             name.append(i)
         return "".join(name[::-1])
+
     # to be added
     def delete_file(self, path):
         """Return True if the deletion was successfully executed, otherwise False"""
