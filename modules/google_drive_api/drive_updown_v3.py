@@ -13,10 +13,7 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store)
 DRIVE = discovery.build('drive', 'v3', http=creds.authorize(Http()))
 
-FILES = (
-    ('hello.txt', None),
-    ('hello.txt', 'application/vnd.google-apps.document'),
-)
+FILES = [('hello.txt', 'application/vnd.google-apps.document')]
 
 for filename, mimeType in FILES:
     metadata = {'name': filename}
