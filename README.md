@@ -1,7 +1,8 @@
-                                cloud storage manager    
+                                            Cloud storage manager    
 This project is intended to facilitate synchronising files amongst several cloud storage 
-accounts. The program is to be used as terminal application with the menu of 
-all functionality it provides. 
+accounts. 
+The program is to be used as terminal application
+with the menu of all functionality it provides. 
 
 The Project consists of the following folders:
 

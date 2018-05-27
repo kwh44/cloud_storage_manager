@@ -1,14 +1,17 @@
 from __future__ import print_function
 
+import io
 import os
 
 from apiclient import discovery
-from apiclient.http import MediaFileUpload
+from apiclient.http import MediaFileUpload, MediaIoBaseDownload
+from googleDocFormats import GoogleDocFormats as GDF
 from httplib2 import Http
 from oauth2client import file, client, tools
 
 
 class GDrive_Storage:
+    _format_list = [(i, GDF[i][0]) for i in GDF]
 
     def __init__(self):
         """Initialize attributes for only internal use"""
@@ -49,14 +52,21 @@ class GDrive_Storage:
                                            fields='id').execute()
         return True if file else False
 
+    def __display_doc_formats(self):
+        print(self._format_list[:6])
+        print(self._format_list[6:11])
+        print(self._format_list[11:18])
+
     def upload_file(self, local_file):
         """Return True if the upload of the file was successful, otherwise False"""
-        mime = input("To what Google Format to convert(None by default)? ")
-        parent = input("Enter the parent folder (root by default): ")
+        self.__display_doc_formats()
+        mime = int(input("To what Google Format to convert(None by default)? "))
+        if mime:
+            mime = GDF[mime][1]
         parent = input("Enter the parent folder (root by default): ")
         name = self._get_filename_from_path(local_file)
         file_metadata = {'name': name,
-                         'parents': parent if parent else 'root'}
+                         'parents': [self.search(parent) if parent else 'root']}
         media = MediaFileUpload(name, mimetype=mime, resumable=True)
         try:
             file = self.__drive.files().create(body=file_metadata,
@@ -76,9 +86,14 @@ class GDrive_Storage:
         return "".join(name[::-1])
 
     # to be added
-    def delete_file(self, path):
+    def delete_file(self, id):
         """Return True if the deletion was successfully executed, otherwise False"""
-        pass
+        try:
+            self.__drive.files().delete(fileId=id).execute()
+            return True
+        except:
+            print("Invalid ID was entered.")
+            return False
 
     def sync(self, id, local_file, mimetype=None, resume=True):
         """Return True if the local synchronization of files was successfully executed, otherwise False."""
@@ -96,12 +111,25 @@ class GDrive_Storage:
          to the Google Drive storage, otherwise False."""
         for i in self.__drive.files().list().execute().get('files', []):
             if i['name'] == query_name:
-                return (i['id'], i['webContentLink'])
+                return i['id']
 
-    def download_file(self, id):
+    def download_file(self, name_extension, id):
         """Return link to download contents of the path, otherwise False"""
         try:
-            return self.__drive.files().list().execute().get(fileId=id)['webContentLink']
+            request = self.__drive.files().get_media(fileId=id)
         except:
-            print("Invalid id was entered, please try again.")
+            print("Invalid id, please try again.")
             return False
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, request)
+        download_succeeded = False
+        while not download_succeeded:
+            download_succeeded = downloader.next_chunk()
+        with open(name_extension, 'wb') as file:
+            file.write(fh.getvalue())
+
+
+if __name__ == "__main__":
+    obj = GDrive_Storage()
+    obj.link_account()
+    obj.upload_file('hello.txt')
