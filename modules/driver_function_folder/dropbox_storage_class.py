@@ -58,10 +58,9 @@ class DropBoxStorage:
                     sys.exit("ERROR: Cannot back up; insufficient space.")
                 elif err.user_message_text:
                     print(err.user_message_text)
-                    sys.exit()
                 else:
                     print(err)
-                    sys.exit()
+                return False
 
     def delete_file(self, path):
         """Return True if the deletion was successfully executed, otherwise False"""
@@ -77,7 +76,7 @@ class DropBoxStorage:
         file_id = dict(
             (i, lst[i].path_display) for i in range(len(lst)) if type(lst[i]) is not dropbox.files.FolderMetadata)
         print(file_id)
-        option_id = input("Enter the number of files to synchronize locally(1, 11,...): ").split(',')
+        option_id = [i.strip() for i in input("Enter the number of files to synchronize locally(1, 11,...): ").split(',')]
         for key in option_id:
             local_path = input(
                 "Enter the local path of {}: ".format(file_id[int(key)][-file_id[int(key)][::-1].index('/'):]))
@@ -90,7 +89,7 @@ class DropBoxStorage:
     def search(self, query_name):
         """Returns path to the file if it was uploaded to the Dropbox storage, otherwise False."""
         lst = [i.path_display for i in self._dbx_user_account.files_list_folder('', recursive=True).entries if
-               not type(i) is dropbox.files.FolderMetadata and query_name in i.path_display]
+               query_name in i.path_display]
         if len(lst) > 0:
             return lst[0]
         else:
@@ -103,3 +102,10 @@ class DropBoxStorage:
             return temp_file.link
         except Exception:
             return False
+
+if __name__ == "__main__":
+    obj = DropBoxStorage()
+    obj.link_account()
+    print(obj.search('hello.txt'))
+    obj.sync()
+

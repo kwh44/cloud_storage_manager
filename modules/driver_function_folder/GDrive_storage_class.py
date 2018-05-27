@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import io
 import os
-
+from mimetypes import MimeTypes
 from apiclient import discovery
 from apiclient.http import MediaFileUpload, MediaIoBaseDownload
 from googleDocFormats import GoogleDocFormats as GDF
@@ -57,23 +57,20 @@ class GDrive_Storage:
         print(self._format_list[6:11])
         print(self._format_list[11:18])
 
-    def upload_file(self, local_file):
+    def upload_file(self, local_file, parent=None):
         """Return True if the upload of the file was successful, otherwise False"""
-        self.__display_doc_formats()
-        mime = int(input("To what Google Format to convert(None by default)? "))
-        if mime:
-            mime = GDF[mime][1]
-        parent = input("Enter the parent folder (root by default): ")
+        mime = MimeTypes()
         name = self._get_filename_from_path(local_file)
         file_metadata = {'name': name,
                          'parents': [self.search(parent) if parent else 'root']}
-        media = MediaFileUpload(name, mimetype=mime, resumable=True)
+        media = MediaFileUpload(name, mimetype=mime.guess_type(name), resumable=True)
         try:
             file = self.__drive.files().create(body=file_metadata,
                                                media_body=media,
                                                fields='id').execute()
-        except:
-            print("An error occurred, while uploading folder, please try again.")
+        except Exception as e:
+            print(e.args)
+            print("An error occurred, while uploading file, please try again.")
             return False
         return True
 
@@ -127,9 +124,3 @@ class GDrive_Storage:
             download_succeeded = downloader.next_chunk()
         with open(name_extension, 'wb') as file:
             file.write(fh.getvalue())
-
-
-if __name__ == "__main__":
-    obj = GDrive_Storage()
-    obj.link_account()
-    obj.upload_file('hello.txt')
