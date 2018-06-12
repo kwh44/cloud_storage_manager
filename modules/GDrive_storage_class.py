@@ -10,14 +10,17 @@ from oauth2client import file, client, tools
 
 class GDrive_Storage:
     def __init__(self):
+        """Initialize the GDrive_Storage class with private drive attribute"""
         self.__drive = None
-        pass
+
 
     @property
     def drive_handle(self):
+        """Return a reference to the private attribute"""
         return self.__drive
 
     def link_account(self):
+        """Links user's Google Drive account the application."""
         SCOPES = 'https://www.googleapis.com/auth/drive'
         store = file.Storage('storage.json')
         credentials = store.get()
@@ -27,6 +30,7 @@ class GDrive_Storage:
         self.__drive = discovery.build('drive', 'v3', http=credentials.authorize(Http()))
 
     def unlink_account(self):
+        """Removes the user's credentials from the current directory."""
         try:
             os.remove("/storage.json")
             return True
@@ -34,6 +38,7 @@ class GDrive_Storage:
             return False
 
     def create_folder(self, name):
+        """Creates folder in user's Google drive account"""
         file_metadata = {
             'name': name,
             'mimeType': 'application/vnd.google-apps.folder'
@@ -43,6 +48,7 @@ class GDrive_Storage:
         return True if file else False
 
     def upload_file(self, local_file, parent=None):
+        """Uploads file stored in local directory to the folder specified."""
         mime = MimeTypes()
         name = self._get_filename_from_path(local_file)
         parent = [self.search(i) for i in parent] if parent else 'root'
@@ -57,6 +63,8 @@ class GDrive_Storage:
         return True
 
     def _get_filename_from_path(self, path):
+        """Function only for internal use. It is used to get the file name from
+        the path to it."""
         name = []
         for i in path[::-1]:
             if i == '/':
@@ -65,12 +73,16 @@ class GDrive_Storage:
         return "".join(name[::-1])
 
     def delete_file(self, filename):
+        """Delete file in user's google account if it's present there,
+        otherwise write the message to the stdout"""
         try:
             self.__drive.files().delete(fileId=self.search(filename)).execute()
         except:
             print("File wasn't found in Google Drive.")
 
     def sync(self, local_file):
+        """Update the file in the user's Google Drive storage if it's
+         present there, otherwise write the message to the stdout."""
         try:
             self.delete_file(self._get_filename_from_path(local_file))
             self.upload_file(local_file)
@@ -79,12 +91,16 @@ class GDrive_Storage:
             print("Failed to synchronize with Google Drive")
 
     def search(self, query_name):
+        """Return the file's id in the user's Google Drive storage account,
+        otherwise write the message to stdout."""
         for i in self.__drive.files().list().execute().get('files', []):
             if i['name'] == query_name:
                 return i['id']
         print("File wasn't found in Google Drive")
 
     def download_file(self, filename):
+        """Create a file with the content downloaded from the user's Google Drive account,
+        in case file is not found, write the message to the stdout"""
         try:
             request = self.__drive.files().get_media(fileId=self.search(filename))
         except:
@@ -98,6 +114,7 @@ class GDrive_Storage:
             file.write(fh.getvalue())
 
     def list_files(self):
+        """Write to the stdout all files present in the user's Google Drive storage account."""
         for j in set(i['name'] for i in self.__drive.files().list().execute().get('files', [])):
             print(j)
 
