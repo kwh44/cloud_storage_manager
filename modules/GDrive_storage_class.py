@@ -13,7 +13,6 @@ class GDrive_Storage:
         """Initialize the GDrive_Storage class with private drive attribute"""
         self.__drive = None
 
-
     @property
     def drive_handle(self):
         """Return a reference to the private attribute"""
@@ -117,4 +116,3 @@ class GDrive_Storage:
         """Write to the stdout all files present in the user's Google Drive storage account."""
         for j in set(i['name'] for i in self.__drive.files().list().execute().get('files', [])):
             print(j)
-
