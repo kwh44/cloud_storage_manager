@@ -41,8 +41,9 @@ class DropBoxStorage:
             self._access_token = oauth_result.access_token
             self._dbx_user_account = Dropbox(self._access_token)
             return True
-        except Exception as e:
-            print('Error:% s' % e, )
+        except:
+            print(
+                "An error occurred while connecting Dropbox storage.\nPlease, check you internet connection and try again.")
             return False
 
     def unlink_account(self):

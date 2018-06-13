@@ -21,17 +21,17 @@ class GDrive_Storage:
     def link_account(self):
         """Links user's Google Drive account the application."""
         SCOPES = 'https://www.googleapis.com/auth/drive'
-        store = file.Storage('storage.json')
+        store = file.Storage('client_config_data.json')
         credentials = store.get()
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
+            flow = client.flow_from_clientsecrets('app_config_data.json', SCOPES)
             credentials = tools.run_flow(flow, store)
         self.__drive = discovery.build('drive', 'v3', http=credentials.authorize(Http()))
 
     def unlink_account(self):
         """Removes the user's credentials from the current directory."""
         try:
-            os.remove("/storage.json")
+            os.remove("client_config_data.json")
             return True
         except:
             return False
