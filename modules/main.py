@@ -59,7 +59,11 @@ class CloudStorageManager:
                 self.google_drive_account.upload_file(local_path)
         else:
             if self.dropbox_account_status:
-                backup_path += '/' + local_path.split('/')[-1]
+                if '/' != backup_path[0]:
+                    backup_path = '/' + backup_path
+                if '/' != backup_path[-1]:
+                    backup_path += '/'
+                backup_path += local_path.split('/')[-1]
                 self.dropbox_account.upload_file(local_path, backup_path)
 
     def download_file(self, filename, storage):
@@ -126,7 +130,7 @@ class CloudStorageManager:
     7: Disconnect Dropbox account.\n
     8: Disconnect Google Drive account.\n
     9: List files.\n
-    10: Exit""")
+    10: Exit\n""")
         try:
             option = int(input("Enter: "))
         except:
@@ -155,16 +159,25 @@ class CloudStorageManager:
             return self.delete_file(input('Enter the name of file to delete: '))
         else:
             if option == 3:
-                storage = int(input("Google Drive - 1, Dropbox - 0 (skip if unimportant)? "))
+                try:
+                    storage = int(input("Google Drive - 1, Dropbox - 0 (skip if unimportant)? "))
+                except:
+                    storage = -1
                 local_path = input("Enter the path to file: ")
                 backup_path = input("To which folder to upload (root directory by default)? ")
                 self.upload_file(local_path, backup_path, storage)
             elif option == 4:
-                storage = int(input("Google Drive - 1, Dropbox - 0 (skip if you forgot)? "))
+                try:
+                    storage = int(input("Google Drive - 1, Dropbox - 0 (skip if you forgot)? "))
+                except:
+                    storage = -1
                 filename = input("Enter the filename: ")
                 self.download_file(filename, storage)
             elif option == 5:
-                storage = int(input("Google Drive - 1, Dropbox - 0 (skip if you forgot)? "))
+                try:
+                    storage = int(input("Google Drive - 1, Dropbox - 0 (skip if you forgot)? "))
+                except:
+                    storage = -1
                 local_path = input("Enter the local path to file: ")
                 self.sync(local_path, storage)
             else:
@@ -182,3 +195,6 @@ class CloudStorageManager:
 if __name__ == "__main__":
     app = CloudStorageManager()
     app.run()
+
+
+    # Thank you 
