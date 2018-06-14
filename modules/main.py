@@ -2,7 +2,7 @@ import socket
 import sys
 
 from GDrive_storage_class import GDrive_Storage
-from dropbox_storage_class import DropBoxStorage
+from dropbox_storage_class import DropboxStorage
 
 
 class CloudStorageManager:
@@ -11,7 +11,7 @@ class CloudStorageManager:
          variables indicating connection status (whether or not the user's storage is linked)."""
         self.google_drive_account = GDrive_Storage()
         self.google_drive_account_status = 0
-        self.dropbox_account = DropBoxStorage()
+        self.dropbox_account = DropboxStorage()
         self.dropbox_account_status = 0
 
     def connect_google_drive(self):

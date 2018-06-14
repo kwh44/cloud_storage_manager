@@ -7,7 +7,7 @@ from dropbox.exceptions import ApiError
 from dropbox.files import WriteMode
 
 
-class DropBoxStorage:
+class DropboxStorage:
     def __init__(self):
         """Initialize the class object with attribute only for internal use."""
         self._APP_KEY = 'orl3775x8jdgcg0'
@@ -71,7 +71,7 @@ class DropBoxStorage:
             self._dbx_user_account.files_delete_v2(self.search(filename))
             return True
         except Exception:
-            print("File wasn't found in DropBox.")
+            print("File wasn't found in Dropbox.")
 
     def sync(self, local_path):
         """Update the file in the user's Dropbox storage,
