@@ -8,7 +8,7 @@ of all functionality it provides.<br/>
  3. Tests - functional code tests
  4. Examples - information about how to use the modules
 
-The video on how to use the program can be found: <a href="https://drive.google.com/open?id=1nmF47dEWHL-aSyqGzHj_o-g4uE6GJJ8h">here</a>.
+The video on how to use the program can be found: <a href="https://drive.google.com/open?id=1P3EIB4nnf0JB2fkFHHdrNKvBfHx64HYE">here</a>.
 
 Andrii Maistruk – @Maistruk_Andrii – andrii.maistruk@gmail.com
 
