@@ -1,4 +1,7 @@
-                       Cloud storage manager    
+
+
+
+<h1>Cloud storage manager</h1>    
 This project is intended to facilitate synchronising files amongst several cloud <br/>
 storage accounts. The program is to be used as terminal application with the menu <br/>
 of all functionality it provides.<br/>
@@ -9,7 +12,3 @@ of all functionality it provides.<br/>
  4. Examples - information about how to use the modules
 
 The video on how to use the program can be found: <a href="https://drive.google.com/open?id=1P3EIB4nnf0JB2fkFHHdrNKvBfHx64HYE">here</a>.
-
-Andrii Maistruk – @Maistruk_Andrii – andrii.maistruk@gmail.com
-
-https://github.com/kwh331/cloud_storage_manager
