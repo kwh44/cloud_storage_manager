@@ -1,3 +1,4 @@
+#!/usr/bin/python3.7
 import socket
 import sys
 
@@ -195,6 +196,3 @@ class CloudStorageManager:
 if __name__ == "__main__":
     app = CloudStorageManager()
     app.run()
-
-
-    # Thank you 
